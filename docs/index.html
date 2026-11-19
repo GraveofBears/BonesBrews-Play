@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bones, Brews _ Bad Attitudes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Pixelify+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink: #0d0710; --plum: #2f154a; --violet: #a062d8; --gold: #ffc145; --bone: #eee3cc; --dim: #b9a8c9; }
+    html, body { margin: 0; height: 100%; background: var(--ink); color: var(--bone); font-family: "Pixelify Sans", system-ui, sans-serif; overflow: hidden; }
+    #stage { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+             background: radial-gradient(ellipse at 50% 30%, #2a1340 0%, #0d0710 70%); }
+    #frame { position: relative; aspect-ratio: 16 / 9; width: min(100vw, calc(100vh * 16 / 9)); max-height: 100vh;
+             box-shadow: 0 0 0 4px #000, 0 0 0 8px var(--gold), 0 0 60px rgba(160, 98, 216, .45); }
+    #unity-canvas { width: 100%; height: 100%; display: block; background: #000; image-rendering: pixelated; }
+    #loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
+               background: linear-gradient(#170a24, #0d0710); }
+    #loading h1 { margin: 0; font-family: "Metal Mania", serif; font-weight: 400; color: var(--gold); text-align: center;
+                  font-size: clamp(28px, 6vw, 72px); letter-spacing: 2px; text-shadow: 4px 4px 0 #3b0f2c; line-height: 1.05; }
+    #loading h1 span { display: block; color: #ff4f7b; font-size: .6em; }
+    #bar { width: min(70%, 520px); height: 22px; border: 4px solid #000; outline: 4px solid var(--gold); background: var(--plum); }
+    #fill { height: 100%; width: 0; background: repeating-linear-gradient(90deg, var(--violet) 0 12px, #c890ff 12px 16px); transition: width .2s; }
+    #tip { color: var(--dim); font-size: clamp(13px, 1.6vw, 18px); text-align: center; padding: 0 20px; min-height: 1.4em; }
+    #fs { position: fixed; right: 14px; bottom: 12px; font: 600 15px "Pixelify Sans", sans-serif; color: var(--bone); background: var(--plum);
+          border: 3px solid #000; outline: 3px solid var(--gold); padding: 6px 14px; cursor: pointer; }
+    #fs:hover { background: #4c2470; }
+    #err { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); background: #5a0f22; border: 3px solid #000; outline: 3px solid #ff4f7b;
+           padding: 8px 14px; display: none; max-width: 80%; }
+  </style>
+</head>
+<body>
+  <div id="stage">
+    <div id="frame">
+      <canvas id="unity-canvas" tabindex="-1"></canvas>
+      <div id="loading">
+        <h1>Bones, Brews<span>&amp; Bad Attitudes</span></h1>
+        <div id="bar"><div id="fill"></div></div>
+        <div id="tip">Stirring the cauldron...</div>
+      </div>
+      <div id="err"></div>
+    </div>
+  </div>
+  <button id="fs" title="Fullscreen">Fullscreen</button>
+  <script>
+    var tips = ["Stirring the cauldron...", "Dusting the skulls...", "Waking Auntie Morwenna...", "Hiding the hellfire from the priest...",
+                "Teaching Mort to mop...", "Polishing cursed relics...", "Counting bat wings..."];
+    var tipEl = document.getElementById("tip"), ti = 0;
+    var tipTimer = setInterval(function () { ti = (ti + 1) % tips.length; tipEl.textContent = tips[ti]; }, 1800);
+    function showError(msg) { var e = document.getElementById("err"); e.textContent = msg; e.style.display = "block"; }
+
+    var canvas = document.getElementById("unity-canvas");
+    var buildUrl = "Build";
+    var config = {
+      dataUrl: buildUrl + "/Web.data.unityweb",
+      frameworkUrl: buildUrl + "/Web.framework.js.unityweb",
+      codeUrl: buildUrl + "/Web.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "GraveBear",
+      productName: "Bones, Brews _ Bad Attitudes",
+      productVersion: "1.0",
+      showBanner: function (msg, type) { if (type === "error") showError(msg); else console.log(msg); },
+    };
+    var unityInstance = null;
+    var script = document.createElement("script");
+    script.src = buildUrl + "/Web.loader.js";
+    script.onload = function () {
+      createUnityInstance(canvas, config, function (p) {
+        document.getElementById("fill").style.width = Math.round(p * 100) + "%";
+      }).then(function (inst) {
+        unityInstance = inst;
+        clearInterval(tipTimer);
+        document.getElementById("loading").style.display = "none";
+        canvas.focus();
+      }).catch(function (m) { showError(m); });
+    };
+    document.body.appendChild(script);
+    document.getElementById("fs").onclick = function () { if (unityInstance) unityInstance.SetFullscreen(1); };
+  </script>
+</body>
+</html>
