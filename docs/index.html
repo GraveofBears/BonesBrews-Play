@@ -44,7 +44,9 @@
   <button id="fs" title="Fullscreen">Fullscreen</button>
   <script>
     var tips = ["Stirring the cauldron...", "Dusting the skulls...", "Waking Auntie Morwenna...", "Hiding the hellfire from the priest...",
-                "Teaching Mort to mop...", "Polishing cursed relics...", "Counting bat wings..."];
+                "Teaching Mort to mop...", "Polishing cursed relics...", "Counting bat wings...", "Ignoring the landlord's texts...",
+                "Pretending this is self-care...", "Muting the coven group chat...", "Stretching first (we're in our 30s)...",
+                "Letting her cook...", "Hiding the wine from Thistlewick...", "Explaining memes to Auntie Morwenna..."];
     var tipEl = document.getElementById("tip"), ti = 0;
     var tipTimer = setInterval(function () { ti = (ti + 1) % tips.length; tipEl.textContent = tips[ti]; }, 1800);
     function showError(msg) { var e = document.getElementById("err"); e.textContent = msg; e.style.display = "block"; }
