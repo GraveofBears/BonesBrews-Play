@@ -52,6 +52,7 @@
     function showError(msg) { var e = document.getElementById("err"); e.textContent = msg; e.style.display = "block"; }
 
     var canvas = document.getElementById("unity-canvas");
+    canvas.addEventListener("contextmenu", function (e) { e.preventDefault(); });   // right-click cancels a planned step in the game
     var buildUrl = "Build";
     var config = {
       dataUrl: buildUrl + "/Web.data.unityweb",
