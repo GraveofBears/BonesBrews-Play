@@ -22,9 +22,10 @@
     #bar { width: min(70%, 520px); height: 22px; border: 4px solid #000; outline: 4px solid var(--gold); background: var(--plum); }
     #fill { height: 100%; width: 0; background: repeating-linear-gradient(90deg, var(--violet) 0 12px, #c890ff 12px 16px); transition: width .2s; }
     #tip { color: var(--dim); font-size: clamp(13px, 1.6vw, 18px); text-align: center; padding: 0 20px; min-height: 1.4em; }
-    #fs { position: fixed; right: 14px; bottom: 12px; font: 600 15px "Pixelify Sans", sans-serif; color: var(--bone); background: var(--plum);
-          border: 3px solid #000; outline: 3px solid var(--gold); padding: 6px 14px; cursor: pointer; }
-    #fs:hover { background: #4c2470; }
+    /* inside the game frame's bottom-right corner (never past its edge), faded until you point at it */
+    #fs { position: absolute; right: 12px; bottom: 10px; font: 600 13px "Pixelify Sans", sans-serif; color: var(--bone); background: var(--plum);
+          border: 2px solid #000; outline: 2px solid var(--gold); padding: 4px 10px; cursor: pointer; opacity: .55; transition: opacity .15s; }
+    #fs:hover { background: #4c2470; opacity: 1; }
     #err { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); background: #5a0f22; border: 3px solid #000; outline: 3px solid #ff4f7b;
            padding: 8px 14px; display: none; max-width: 80%; }
   </style>
@@ -39,9 +40,9 @@
         <div id="tip">Stirring the cauldron...</div>
       </div>
       <div id="err"></div>
+      <button id="fs" title="Fullscreen">Fullscreen</button>
     </div>
   </div>
-  <button id="fs" title="Fullscreen">Fullscreen</button>
   <script>
     var tips = ["Stirring the cauldron...", "Dusting the skulls...", "Waking Auntie Morwenna...", "Hiding the hellfire from the priest...",
                 "Teaching Mort to mop...", "Polishing cursed relics...", "Counting bat wings...", "Ignoring the landlord's texts...",
